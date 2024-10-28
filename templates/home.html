@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/codemirror.min.css">
     <style>
         body {
             display: flex;
@@ -49,20 +49,52 @@
         h3 {
             color: aqua;
         }
+
+         /* Basic layout styling */
+        #editor { 
+            line-height: 1.2;
+            height: 300px; 
+            border: 1px solid #ddd; 
+        }
+
+        #output { 
+            margin-top: 10px; 
+            font-family: monospace; 
+            padding: 10px; 
+            background-color: #f5f5f5; 
+        }
+
+        .error { 
+            color: red; 
+        }
+
+        .success { 
+            color: green; 
+        }
+
+        .button { 
+            margin-top: 10px; 
+            padding: 5px 10px; 
+        }
     </style>
 </head>
 <body>
     <section>
         <h3 align="center">Python Code Compiler</h3>
-        <section>
+        <!--<section>
             <textarea 
                 id="code" 
                 rows="10" 
                 cols="75">
             </textarea>
-        </section>
-        
-        <button type="button" class="btn btn-secondary" onclick="executeCode()">Run Code</button>
+        </section>-->
+
+        <div 
+            id="editor">
+        </div>
+        <br>
+        <button type="button" class="btn btn-primary" onclick="executeCode()">Run Code</button>
+        <button type="button" class="btn btn-success" onclick="clearEditor()">Clear Code</button>
 
         <section>
             <pre 

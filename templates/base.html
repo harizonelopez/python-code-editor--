@@ -68,5 +68,44 @@
                 });
         }
     </script>
+
+    <script 
+        src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js">
+    </script>
+
+    <script 
+        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/codemirror.min.js">
+    </script>
+    
+    <script 
+        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/mode/python/python.min.js">
+    </script>
+
+    <script>
+        const editor = CodeMirror(document.getElementById('editor'), {
+            mode: "python",
+            lineNumbers: true,
+            theme: "default",
+        });
+
+        function executeCode() {
+            const code = editor.getValue();
+            fetch('/run_code', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: code, language: 'python' })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('output').textContent = data.output;
+                document.getElementById('output').className = data.output.includes("Error") ? 'error' : 'success';
+            });
+        }
+
+        function clearEditor() {
+            editor.setValue('');
+            document.getElementById('output').textContent = '';
+        }
+    </script>
   </body>
 </html>

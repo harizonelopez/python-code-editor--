@@ -18,7 +18,7 @@ def run_code():
         try:
             result = subprocess.run(
                 ["python", "-c", code],
-                capture_output=True, text=True, timeout=5
+                capture_output=True, text=True, timeout=10
             )
             output = result.stdout or result.stderr
         except subprocess.TimeoutExpired:
