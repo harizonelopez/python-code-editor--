@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Code Compiler</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+</head>
+<body>
+    <textarea id="code" rows="10" cols="50"></textarea>
+    <button onclick="executeCode()">Run Code</button>
+    <pre id="output"></pre>
+
+    <script>
+        function executeCode() {
+            const code = document.getElementById('code').value;
+            axios.post('/run_code', { code: code, language: 'python' })
+                 .then(response => {
+                     document.getElementById('output').textContent = response.data.output;
+                 });
+        }
+    </script>
+</body>
+</html>
