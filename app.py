@@ -19,8 +19,25 @@ def run_code():
             ["python", "-c", code],
             input=inputs, text=True, capture_output=True, timeout=5
         )
-        output = result.stdout
+        output_lines = result.stdout.splitlines()
+        combined_output = []
+
+        # Separate prompts and user inputs
+        input_lines = inputs.splitlines()
+        input_idx = 0
+
+        for line in output_lines:
+            if "Enter" in line and input_idx < len(input_lines):  # Check for prompts
+                combined_output.append(f"{line} {input_lines[input_idx]}")  # Combine prompt with input
+                input_idx += 1
+            else:
+                combined_output.append(line)  # Append any other output
+
+        output = "\n".join(combined_output)
+
+        # output = result.stdout
         prompt = None if result.returncode == 0 else " "
+
     except subprocess.TimeoutExpired:
         output = "Execution timed out!"
         prompt = None
