@@ -119,7 +119,7 @@
 
         function displayOutput(output, end = false) {
             const outputDiv = document.getElementById('output');
-            outputDiv.innerText += output;  // Append new output
+            outputDiv.innerText = output;  // Append new output
             if (end) codeRunning = false;
         }
 
