@@ -17,7 +17,7 @@ def run_code():
     if language == "python":
         try:
             result = subprocess.run(
-                ["python3", "-c", code],
+                ["python", "-c", code],
                 capture_output=True, text=True, timeout=5
             )
             output = result.stdout or result.stderr

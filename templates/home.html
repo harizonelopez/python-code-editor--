@@ -1,23 +1,77 @@
+{% extends "base.html" %} 
+{% block title %} python Compiler {% endblock %}
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Code Compiler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #282c35;
+            color: #fff;
+            align-items: center;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        header {
+            background-color: #1e2229;
+            text-align: center;
+            padding: 1em;
+        }
+
+        footer {
+            background-color: #1e2229;
+            color: turquoise;
+            text-align: center;
+            padding: 0em 0;
+            position: fixed;
+            bottom: 0;
+            width: 65%;
+        }
+
+        section {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #373c49;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        h3 {
+            color: aqua;
+        }
+    </style>
 </head>
 <body>
-    <textarea id="code" rows="10" cols="50"></textarea>
-    <button onclick="executeCode()">Run Code</button>
-    <pre id="output"></pre>
+    <section>
+        <h3 align="center">Python Code Compiler</h3>
+        <section>
+            <textarea 
+                id="code" 
+                rows="15" 
+                cols="87">
+            </textarea>
 
-    <script>
-        function executeCode() {
-            const code = document.getElementById('code').value;
-            axios.post('/run_code', { code: code, language: 'python' })
-                 .then(response => {
-                     document.getElementById('output').textContent = response.data.output;
-                 });
-        }
-    </script>
+            <pre 
+                id="output">
+            </pre>
+        </section>
+        <button class="btn btn-primary" onclick="executeCode()">Run Code</button>
+
+       <footer>
+            <p>&copy; 2024 Dev_aladinh production</p>
+       </footer> 
+
+    </section>
 </body>
 </html>
+{% endblock %}
