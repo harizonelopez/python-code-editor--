@@ -50,7 +50,6 @@
             color: aqua;
         }
 
-         /* Basic layout styling */
         #editor { 
             line-height: 1.2;
             height: 300px; 
@@ -61,7 +60,13 @@
             margin-top: 10px; 
             font-family: monospace; 
             padding: 10px; 
-            background-color: #f5f5f5; 
+            background-color: rgb(172, 35, 138); 
+        }
+
+        #user-input { 
+            width: 100%; 
+            padding: 5px; 
+            margin-top: 5px; 
         }
 
         .error { 
@@ -80,15 +85,7 @@
 </head>
 <body>
     <section>
-        <h3 align="center">Python Code Compiler</h3>
-        <!--<section>
-            <textarea 
-                id="code" 
-                rows="10" 
-                cols="75">
-            </textarea>
-        </section>-->
-
+        <h3 align="center">Python Code Editor</h3>
         <div 
             id="editor">
         </div>
@@ -97,9 +94,15 @@
         <button type="button" class="btn btn-success" onclick="clearEditor()">Clear Code</button>
 
         <section>
-            <pre 
+            <div 
                 id="output">
-            </pre>
+            </div>
+            <input 
+                id="user-input" 
+                placeholder="Enter your input here!" 
+                style="display:none;" 
+                onkeypress="handleInput(event)"
+            >
         </section>
 
        <footer>
