@@ -33,12 +33,12 @@ This ia a Python code compiler that allows users to code and run Python code sni
 1. Clone the repository:
    ```bash
    git clone https://github.com/harizonelopez/python-compiler-app.git
-   cd python-compiler-app
+   `cd python-compiler-app`
    ```
 
 2. Run the application:
    ```bash
-   python app.py
+   `python app.py`
 
 3. Access the Application
 
