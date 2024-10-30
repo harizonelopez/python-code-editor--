@@ -6,7 +6,7 @@ app.config['SECRET_KEY'] = 'aladinh00-01montext'
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template("home.html")
 
 @app.route('/run_code', methods=['POST'])
 def run_code():
