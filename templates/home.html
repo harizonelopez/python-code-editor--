@@ -1,13 +1,12 @@
 {% extends "base.html" %} 
-{% block title %} python Compiler {% endblock %}
+{% block title %}Code Python{% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/codemirror.min.css">
     <style>
         body {
             display: flex;
@@ -64,9 +63,10 @@
         }
 
         #user-input { 
-            width: 100%; 
+            width: 25%; 
             padding: 5px; 
-            margin-top: 5px; 
+            margin-top: 5px;
+            background-color: #98a0b6; 
         }
 
         .error { 
@@ -99,7 +99,7 @@
             </div>
             <input 
                 id="user-input" 
-                placeholder="Enter your input here!" 
+                placeholder="Enter input!" 
                 style="display:none;" 
                 onkeypress="handleInput(event)"
             >
