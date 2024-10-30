@@ -32,7 +32,7 @@ This ia a Python code compiler that allows users to code and run Python code sni
 
 1. Clone the repository:
    ```bash
-   git clone `https://github.com/harizonelopez/python-compiler-app.git`
+   git clone https://github.com/harizonelopez/python-compiler-app.git
    cd python-compiler-app
    ```
 
