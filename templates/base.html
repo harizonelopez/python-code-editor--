@@ -14,6 +14,10 @@
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       crossorigin="anonymous"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/addon/hint/show-hint.min.css"
+    />
     <title>{% block title %}home{% endblock %}</title>
   </head>
   <body>
@@ -60,82 +64,127 @@
     </script>
 
     <script 
-        src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js">
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js">
     </script>
 
     <script 
-        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/codemirror.min.js">
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/codemirror.min.js">
     </script>
 
     <script 
-        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/mode/python/python.min.js">
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/mode/python/python.min.js">
     </script>
-
+    <script 
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/addon/hint/show-hint.min.js">
+    </script>
+    <!--<script 
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/addon/hint/anyword-hint.min.js">
+    </script>-->
+    <script 
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/mode/python/python.min.js">
+    </script>
     <script>
-        const editor = CodeMirror(document.getElementById('editor'), {
-            mode: "python",
-            lineNumbers: true,
-            theme: "default",
+      const pythonKeywords = [
+        "False", "None", "True", "and", "as", "assert", "async", "await", "break", "class",
+        "continue", "def", "del", "elif", "else", "except", "finally", "for", "from", "global",
+        "if", "import", "in", "is", "lambda", "nonlocal", "not", "or", "pass", "raise", "return",
+        "try", "while", "with", "yield", "print", "len", "range", "list", "dict", "set", "tuple",
+        "int", "float", "str", "open", "input", "enumerate", "zip", "map", "filter", "sum", "min",
+        "max", "sorted", "abs", "all", "any", "bool", "callable", "chr", "ord", "divmod", "exec",
+        "format", "hasattr", "getattr", "setattr", "isinstance", "issubclass", "vars"
+      ];
+
+      // Register Python-specific hint helper
+      CodeMirror.registerHelper("hint", "python", function(editor) {
+        const cur = editor.getCursor();
+        const token = editor.getTokenAt(cur);
+        const start = token.start;
+        const end = token.end;
+        const word = token.string;
+
+        // Filter the list of keywords for suggestions that start with the current word
+        const list = pythonKeywords.filter(function(kw) {
+            return kw.startsWith(word);
         });
 
-        let userInputs = [];  // To store inputs sequentially
-        let codeRunning = false;
+        return {
+            list: list,
+            from: CodeMirror.Pos(cur.line, start),
+            to: CodeMirror.Pos(cur.line, end)
+        };
+      });
 
-        function executeCode() {
-            const code = editor.getValue();
-            userInputs = [];
-            codeRunning = true;
+      const editor = CodeMirror(document.getElementById('editor'), {
+          mode: "python",
+          lineNumbers: true,
+          theme: "default",
+          extraKeys: { "Ctrl-Space": "autocomplete" } // Trigger autocomplete with Ctrl-Space
+      });
 
-            document.getElementById('output').textContent = '';  // Clear output area
-            fetchCodeExecution(code);
-        }
+      editor.on("inputRead", function (cm, event) {
+          if (!cm.state.completionActive && /^[a-zA-Z_]+$/.test(event.text[0])) {  // Autocomplete if input is alphanumeric
+              CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
+          }
+      });
 
-        function fetchCodeExecution(code, inputs = '') {
-            fetch('/run_code', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ code: code, inputs: inputs })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.prompt) {
-                    displayOutput(data.output);  // Display output up to prompt
-                    promptForInput(data.prompt);
-                } else {
-                    displayOutput(data.output, true);  // Final output product
-                }
-            });
-        }
+      let userInputs = [];  // To store inputs sequentially
+      let codeRunning = false;
 
-        function displayOutput(output, end = false) {
-            const outputDiv = document.getElementById('output');
-            outputDiv.innerText = output;  // Append new output
-            if (end) codeRunning = false;
-        }
+      function executeCode() {
+          const code = editor.getValue();
+          userInputs = [];
+          codeRunning = true;
 
-        function promptForInput(promptText) {
-            document.getElementById('output').innerText += promptText + "\n";
-            const inputField = document.getElementById('user-input');
-            inputField.style.display = 'block';
-            inputField.focus();
-        }
+          document.getElementById('output').textContent = '';  // Clear output area
+          fetchCodeExecution(code);
+      }
 
-        function handleInput(event) {
-            if (event.key === 'Enter' && codeRunning) {
-                const inputField = document.getElementById('user-input');
-                userInputs.push(inputField.value);
-                fetchCodeExecution(editor.getValue(), userInputs.join('\n'));
-                inputField.value = '';
-                inputField.style.display = 'none';
-            }
-        }
+      function fetchCodeExecution(code, inputs = '') {
+          fetch('/run_code', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ code: code, inputs: inputs })
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.prompt) {
+                  displayOutput(data.output);  // Display output up to prompt
+                  promptForInput(data.prompt);
+              } else {
+                  displayOutput(data.output, true);  // Final output product
+              }
+          });
+      }
 
-        function clearEditor() {
-            editor.setValue('');
-            document.getElementById('output').textContent = '';
-            document.getElementById('user-input').style.display = 'none';
-            userInputs = [];
-        }
+      function displayOutput(output, end = false) {
+          const outputDiv = document.getElementById('output');
+          outputDiv.innerText = output;  // Append new output
+          if (end) codeRunning = false;
+      }
+
+      function promptForInput(promptText) {
+          document.getElementById('output').innerText += promptText + "\n";
+          const inputField = document.getElementById('user-input');
+          inputField.style.display = 'block';
+          inputField.focus();
+      }
+
+      function handleInput(event) {
+          if (event.key === 'Enter' && codeRunning) {
+              const inputField = document.getElementById('user-input');
+              userInputs.push(inputField.value);
+              fetchCodeExecution(editor.getValue(), userInputs.join('\n'));
+              inputField.value = '';
+              inputField.style.display = 'none';
+          }
+      }
+
+      function clearEditor() {
+          editor.setValue('');
+          document.getElementById('output').textContent = '';
+          document.getElementById('user-input').style.display = 'none';
+          userInputs = [];
+      }
     </script>
   </body>
 </html>
