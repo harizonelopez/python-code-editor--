@@ -5,10 +5,10 @@ This ia a Python code compiler that allows users to code and run Python code sni
 ## Features
 
  **Real-time Code Execution** 
-   - Runs Python code snippets entered by the user.
+   - Runs the Python code entered by the user.
 
  **User Input Handling**
-   - Supports multiple prompts within the code for user inputs.
+   - Supports input prompts within the code for user inputs.
 
  **Integrated Output Display**
    - Displays code output and entered inputs together in a single output area.
