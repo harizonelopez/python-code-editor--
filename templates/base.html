@@ -102,9 +102,14 @@
         const end = token.end;
         const word = token.string;
 
-        // Filter the list of keywords for suggestions that start with the current word
-        const list = pythonKeywords.filter(function(kw) {
-            return kw.startsWith(word);
+        // Filter and prioritize suggestions based on the entered text
+        let list = pythonKeywords
+          .filter(kw => kw.includes(word)) // Only include items containing the typed word
+          .sort((a, b) => {
+              // Sort by exact match first, then alphabetically
+              if (a.startsWith(word) && !b.startsWith(word)) return -1;
+              if (!a.startsWith(word) && b.startsWith(word)) return 1;
+              return a.localeCompare(b);
         });
 
         return {
@@ -163,20 +168,34 @@
       }
 
       function promptForInput(promptText) {
-          document.getElementById('output').innerText += promptText + "\n";
+          // document.getElementById('output').innerText += promptText + "\n";
           const inputField = document.getElementById('user-input');
+          // Added start
+          const outputDiv = document.getElementById('output');
+          // Show the prompt text with input field
+          outputDiv.innerText += `${promptText} `; // Add prompt text with a space after
+          // Added end
           inputField.style.display = 'block';
           inputField.focus();
       }
 
       function handleInput(event) {
-          if (event.key === 'Enter' && codeRunning) {
-              const inputField = document.getElementById('user-input');
-              userInputs.push(inputField.value);
-              fetchCodeExecution(editor.getValue(), userInputs.join('\n'));
-              inputField.value = '';
-              inputField.style.display = 'none';
-          }
+        if (event.key === 'Enter' && codeRunning) {
+          const inputField = document.getElementById('user-input');
+          const userValue = inputField.value;
+
+          // Update the prompt line with the entered value
+          const outputDiv = document.getElementById('output');
+          // outputDiv.innerText = outputDiv.innerText.replace(/:\>\s*$/, `:> ${userValue}\n`);
+          const lastPrompt = outputDiv.innerText.split('\n').pop();
+          outputDiv.innerText = outputDiv.innerText.slice(0, -lastPrompt.length) + `${lastPrompt.trim()} ${userValue}\n`;
+
+          userInputs.push(userValue); // Add input to the list
+          fetchCodeExecution(editor.getValue(), userInputs.join('\n'));
+
+          inputField.value = ''; // Clear input field for next prompt if needed
+          inputField.style.display = 'none'; // Hide input field
+        }
       }
 
       function clearEditor() {
