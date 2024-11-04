@@ -15,15 +15,20 @@ def run_code():
     inputs = data.get('inputs', '')
 
     try:
+        # Execute the code safely with timeout
         result = subprocess.run(
-            ["python", "-c", code],
+            ["python", "-c", code],  
             input=inputs, text=True, capture_output=True, timeout=5
         )
-        output = result.stdout
-        prompt = None if result.returncode == 0 else " "
+        # Get stdout and stderr to include error messages in output
+        output = result.stdout or result.stderr
+        prompt = None if result.returncode == 0 else " "  # Checks if there was an error
 
     except subprocess.TimeoutExpired:
-        output = "Execution timed out!"
+        output = "OOPS!! Execution timed out!"
+        prompt = None
+    except Exception as e:
+        output = f"An error occurred: {e}"
         prompt = None
 
     return jsonify(output=output, prompt=prompt)
