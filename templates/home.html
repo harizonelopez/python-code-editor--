@@ -2,10 +2,7 @@
 {% block title %}Code Python{% endblock %}
 
 {% block content %}
-<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.7/codemirror.min.css">
     <style>
         body {
@@ -83,33 +80,30 @@
         }
     </style>
 </head>
-<body>
+<section>
+    <h3 align="center">Python Code Editor</h3>
+    <div 
+        id="editor">
+    </div>
+    <br>
+    <button type="button" class="btn btn-primary" onclick="executeCode()">Run Code</button>
+    <button type="button" class="btn btn-success" onclick="clearEditor()">Clear Code</button>
+
     <section>
-        <h3 align="center">Python Code Editor</h3>
         <div 
-            id="editor">
+            id="output">
         </div>
-        <br>
-        <button type="button" class="btn btn-primary" onclick="executeCode()">Run Code</button>
-        <button type="button" class="btn btn-success" onclick="clearEditor()">Clear Code</button>
-
-        <section>
-            <div 
-                id="output">
-            </div>
-            <input 
-                id="user-input" 
-                placeholder="Enter input!" 
-                style="display:none;" 
-                onkeypress="handleInput(event)"
-            >
-        </section>
-
-       <footer>
-            <p>&copy; 2024 Dev_aladinh production</p>
-       </footer> 
-
+        <input 
+            id="user-input" 
+            placeholder="Enter input!" 
+            style="display:none;" 
+            onkeypress="handleInput(event)"
+        >
     </section>
-</body>
-</html>
+
+    <footer>
+        <p>&copy; 2024 Dev_aladinh production</p>
+    </footer> 
+
+</section>
 {% endblock %}
