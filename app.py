@@ -15,7 +15,7 @@ def run_code():
     inputs = data.get('inputs', '')
 
     try:
-        # Execute the code safely with timeout
+        # Execute the code using subprocess
         result = subprocess.run(
             ["python", "-c", code],  
             input=inputs, text=True, capture_output=True, timeout=5
